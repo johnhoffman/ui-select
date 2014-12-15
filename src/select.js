@@ -105,13 +105,7 @@
   })
 
   /**
-   * Parses "repeat" attribute.
-   *
-   * Taken from AngularJS ngRepeat source code
-   * See https://github.com/angular/angular.js/blob/v1.2.15/src/ng/directive/ngRepeat.js#L211
-   *
-   * Original discussion about parsing "repeat" attribute instead of fully relying on ng-repeat:
-   * https://github.com/angular-ui/ui-select/commit/5dd63ad#commitcomment-5504697
+   * Parses "scroll" attribute.
    */
   .service('ScrollParser', ['uiSelectMinErr','$parse', function(uiSelectMinErr, $parse) {
     var self = this;
