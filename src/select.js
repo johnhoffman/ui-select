@@ -230,7 +230,7 @@
       })[0];
     };
 
-    ctrl.parseRepeatAttr = function(repeatAttr) {
+    ctrl.parseScrollAttr = function(repeatAttr) {
       function setPlainItems(items) {
         ctrl.items = items;
       }
