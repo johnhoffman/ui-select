@@ -230,35 +230,15 @@
       })[0];
     };
 
-    ctrl.parseRepeatAttr = function(repeatAttr, groupByExp) {
-      function updateGroups(items) {
-        ctrl.groups = [];
-        angular.forEach(items, function(item) {
-          var groupFn = $scope.$eval(groupByExp);
-          var groupName = angular.isFunction(groupFn) ? groupFn(item) : item[groupFn];
-          var group = ctrl.findGroupByName(groupName);
-          if(group) {
-            group.items.push(item);
-          }
-          else {
-            ctrl.groups.push({name: groupName, items: [item]});
-          }
-        });
-        ctrl.items = [];
-        ctrl.groups.forEach(function(group) {
-          ctrl.items = ctrl.items.concat(group.items);
-        });
-      }
-
+    ctrl.parseRepeatAttr = function(repeatAttr) {
       function setPlainItems(items) {
         ctrl.items = items;
       }
 
-      var setItemsFn = groupByExp ? updateGroups : setPlainItems;
+      var setItemsFn = setPlainItems;
 
       ctrl.parserResult = ScrollParser.parse(repeatAttr);
 
-      ctrl.isGrouped = !!groupByExp;
       ctrl.itemProperty = ctrl.parserResult.itemName;
 
       // See https://github.com/angular/angular.js/blob/v1.2.15/src/ng/directive/ngRepeat.js#L259
