@@ -113,7 +113,7 @@
    * Original discussion about parsing "repeat" attribute instead of fully relying on ng-repeat:
    * https://github.com/angular-ui/ui-select/commit/5dd63ad#commitcomment-5504697
    */
-  .service('RepeatParser', ['uiSelectMinErr','$parse', function(uiSelectMinErr, $parse) {
+  .service('ScrollParser', ['uiSelectMinErr','$parse', function(uiSelectMinErr, $parse) {
     var self = this;
 
     /**
@@ -151,8 +151,8 @@
    * put as much logic in the controller (instead of the link functions) as possible so it can be easily tested.
    */
   .controller('uiSelectCtrl',
-    ['$scope', '$element', '$timeout', '$filter', 'RepeatParser', 'uiSelectMinErr', 'uiSelectConfig',
-    function($scope, $element, $timeout, $filter, RepeatParser, uiSelectMinErr, uiSelectConfig) {
+    ['$scope', '$element', '$timeout', '$filter', 'ScrollParser', 'uiSelectMinErr', 'uiSelectConfig',
+    function($scope, $element, $timeout, $filter, ScrollParser, uiSelectMinErr, uiSelectConfig) {
 
     var ctrl = this;
 
@@ -256,7 +256,7 @@
 
       var setItemsFn = groupByExp ? updateGroups : setPlainItems;
 
-      ctrl.parserResult = RepeatParser.parse(repeatAttr);
+      ctrl.parserResult = ScrollParser.parse(repeatAttr);
 
       ctrl.isGrouped = !!groupByExp;
       ctrl.itemProperty = ctrl.parserResult.itemName;
@@ -1173,8 +1173,8 @@
   }])
 
   .directive('uiSelectChoices',
-    ['uiSelectConfig', 'RepeatParser', 'uiSelectMinErr', '$compile',
-    function(uiSelectConfig, RepeatParser, uiSelectMinErr, $compile) {
+    ['uiSelectConfig', 'ScrollParser', 'uiSelectMinErr', '$compile',
+    function(uiSelectConfig, ScrollParser, uiSelectMinErr, $compile) {
 
     return {
       restrict: 'EA',
@@ -1193,7 +1193,7 @@
 
         return function link(scope, element, attrs, $select, transcludeFn) {
 
-          // var repeat = RepeatParser.parse(attrs.repeat);
+          // var repeat = ScrollParser.parse(attrs.repeat);
           var groupByExp = attrs.groupBy;
 
           $select.parseRepeatAttr(attrs.repeat, groupByExp); //Result ready at $select.parserResult
@@ -1204,7 +1204,7 @@
           if(groupByExp) {
             var groups = element.querySelectorAll('.ui-select-choices-group');
             if (groups.length !== 1) throw uiSelectMinErr('rows', "Expected 1 .ui-select-choices-group but got '{0}'.", groups.length);
-            groups.attr('ng-repeat', RepeatParser.getGroupNgRepeatExpression());
+            groups.attr('ng-repeat', ScrollParser.getGroupNgRepeatExpression());
           }
 
           var choices = element.querySelectorAll('.ui-select-choices-row');
@@ -1212,7 +1212,7 @@
             throw uiSelectMinErr('rows', "Expected 1 .ui-select-choices-row but got '{0}'.", choices.length);
           }
 
-          choices.attr('ng-repeat', RepeatParser.getNgRepeatExpression($select.parserResult.itemName, '$select.items', $select.parserResult.trackByExp, groupByExp))
+          choices.attr('ng-repeat', ScrollParser.getNgRepeatExpression($select.parserResult.itemName, '$select.items', $select.parserResult.trackByExp, groupByExp))
               .attr('ng-if', '$select.open') //Prevent unnecessary watches when dropdown is closed
               .attr('ng-mouseenter', '$select.setActiveItem('+$select.parserResult.itemName +')')
               .attr('ng-click', '$select.select(' + $select.parserResult.itemName + ',false,$event)');
