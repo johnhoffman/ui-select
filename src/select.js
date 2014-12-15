@@ -218,24 +218,17 @@
       }
     };
 
-    ctrl.findGroupByName = function(name) {
-      return ctrl.groups && ctrl.groups.filter(function(group) {
-        return group.name === name;
-      })[0];
-    };
-
-    ctrl.parseScrollAttr = function(repeatAttr) {
+    ctrl.parseScrollAttr = function(scrollAttr) {
       function setPlainItems(items) {
         ctrl.items = items;
       }
 
       var setItemsFn = setPlainItems;
 
-      ctrl.parserResult = ScrollParser.parse(repeatAttr);
+      ctrl.parserResult = ScrollParser.parse(scrollAttr);
 
       ctrl.itemProperty = ctrl.parserResult.itemName;
 
-      // See https://github.com/angular/angular.js/blob/v1.2.15/src/ng/directive/ngRepeat.js#L259
       $scope.$watchCollection(ctrl.parserResult.source, function(items) {
 
         if (items === undefined || items === null) {
@@ -814,10 +807,7 @@
       if (posY > height) {
         container[0].scrollTop += posY - height;
       } else if (posY < highlighted.clientHeight) {
-        if (ctrl.isGrouped && ctrl.activeIndex === 0)
-          container[0].scrollTop = 0; //To make group header visible when going all the way up
-        else
-          container[0].scrollTop -= highlighted.clientHeight - posY;
+        container[0].scrollTop -= highlighted.clientHeight - posY;
       }
     }
 
@@ -935,10 +925,6 @@
 
         //Set reference to ngModel from uiSelectCtrl
         $select.ngModel = ngModel;
-
-        $select.choiceGrouped = function(group){
-          return $select.isGrouped && group && group.name;
-        };
 
         //Idea from: https://github.com/ivaynberg/select2/blob/79b5bf6db918d7560bdd959109b7bcfb47edaf43/select2.js#L1954
         var focusser = angular.element("<input ng-disabled='$select.disabled' class='ui-select-focusser ui-select-offscreen' type='text' aria-haspopup='true' role='button' />");
@@ -1184,7 +1170,7 @@
 
           var rowsInner = element.querySelectorAll('.ui-select-choices-row-inner');
           if (rowsInner.length !== 1) throw uiSelectMinErr('rows', "Expected 1 .ui-select-choices-row-inner but got '{0}'.", rowsInner.length);
-          rowsInner.attr('uis-transclude-append', ''); //Adding uisTranscludeAppend directive to row element after choices element has ngRepeat
+          rowsInner.attr('uis-transclude-append', ''); //Adding uisTranscludeAppend directive to row element after choices element has uiScroll
 
           $compile(element, transcludeFn)(scope); //Passing current transcludeFn to be able to append elements correctly from uisTranscludeAppend
 
