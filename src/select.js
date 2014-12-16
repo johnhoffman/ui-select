@@ -84,7 +84,7 @@
     };
   }
 
-  angular.module('ui.select', [])
+  angular.module('ui.select', ['ui.scroll'])
 
   .constant('uiSelectConfig', {
     theme: 'bootstrap',
